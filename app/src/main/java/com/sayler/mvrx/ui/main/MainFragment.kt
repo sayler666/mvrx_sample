@@ -4,20 +4,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import com.airbnb.mvrx.BaseMvRxFragment
+import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.withState
 import com.sayler.mvrx.R
 import kotlinx.android.synthetic.main.main_fragment.*
 import kotlin.random.Random
 
 data class HelloWorldState(
     val title: String = "HelloWorld ${Random.nextInt(100)}"
-)
+) : MvRxState
 
-class MainFragment : Fragment() {
+class HelloWorldViewModel(initialState: HelloWorldState) : MvRxViewModel<HelloWorldState>(initialState)
 
-    private val state = HelloWorldState()
+class MainFragment : BaseMvRxFragment() {
+    private val viewModel: HelloWorldViewModel by fragmentViewModel()
 
     companion object {
+
         fun newInstance(): MainFragment = MainFragment()
     }
 
@@ -28,9 +33,8 @@ class MainFragment : Fragment() {
         return inflater.inflate(R.layout.main_fragment, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        text.text = state.title
+    override fun invalidate() = withState(viewModel) {
+        text.text = it.title
     }
 
 }
