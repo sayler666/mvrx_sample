@@ -2,7 +2,7 @@ package com.sayler.mvrx
 
 import android.os.Bundle
 import com.airbnb.mvrx.BaseMvRxActivity
-import com.sayler.mvrx.ui.main.MainFragment
+import com.sayler.mvrx.ui.main.UserProfileFragment
 
 class MainActivity : BaseMvRxActivity() {
 
@@ -11,7 +11,7 @@ class MainActivity : BaseMvRxActivity() {
         setContentView(R.layout.main_activity)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container1, MainFragment.newInstance())
+                .replace(R.id.container1, UserProfileFragment.newInstance("42"))
                 .commitNow()
         }
     }
