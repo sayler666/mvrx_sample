@@ -4,22 +4,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.airbnb.mvrx.BaseMvRxFragment
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.fragmentViewModel
-import com.airbnb.mvrx.withState
+import com.airbnb.mvrx.*
 import com.sayler.mvrx.R
+import io.reactivex.Observable
 import kotlinx.android.synthetic.main.main_fragment.*
+import java.util.concurrent.TimeUnit
+import kotlin.random.Random
 
 data class HelloWorldState(
     val title: String = "HelloWorld",
-    val count: Int = 0
-) : MvRxState {
-    var titleWithCount = "$title $count"
-}
+    val temperature: Async<Int> = Uninitialized
+) : MvRxState
 
 class HelloWorldViewModel(initialState: HelloWorldState) : MvRxViewModel<HelloWorldState>(initialState) {
-    fun incrementCount() = setState { copy(count = count + 1) }
+    fun fetchTemp() {
+        Observable.just(Random.nextInt(40))
+            .delay(3, TimeUnit.SECONDS)
+            .execute { copy(temperature = it) }
+    }
 }
 
 class MainFragment : BaseMvRxFragment() {
@@ -38,12 +40,17 @@ class MainFragment : BaseMvRxFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         text.setOnClickListener {
-            viewModel.incrementCount()
+            viewModel.fetchTemp()
         }
     }
 
-    override fun invalidate() = withState(viewModel) {
-        text.text = it.titleWithCount
+    override fun invalidate() = withState(viewModel) { state ->
+        text.text = when (state.temperature) {
+            is Uninitialized -> "Click to load"
+            is Loading -> "Loading..."
+            is Success -> "Temperature: ${state.temperature()}"
+            is Fail -> "Error: ${state.temperature.error.message}"
+        }
     }
 
 }
