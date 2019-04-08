@@ -1,6 +1,7 @@
 package com.sayler.mvrx.ui.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,7 +29,26 @@ class MainFragment : BaseMvRxFragment() {
     private val viewModel: HelloWorldViewModel by fragmentViewModel()
 
     companion object {
+        const val TAG = "MainFragment"
         fun newInstance(): MainFragment = MainFragment()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        viewModel.subscribe(uniqueOnly()) { state ->
+            Log.d(TAG, "state: $state")
+        }
+
+        viewModel.selectSubscribe(HelloWorldState::temperature) { temp ->
+            Log.d(TAG, "temp: $temp")
+        }
+
+        viewModel.asyncSubscribe(HelloWorldState::temperature, onSuccess = {
+            Log.d(TAG, "Success")
+        }, onFail = {
+            Log.d(TAG, "Fail")
+        }, deliveryMode = uniqueOnly())
     }
 
     override fun onCreateView(
