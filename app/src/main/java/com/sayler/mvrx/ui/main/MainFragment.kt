@@ -1,36 +1,25 @@
 package com.sayler.mvrx.ui.main
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.airbnb.mvrx.*
+import androidx.fragment.app.Fragment
 import com.sayler.mvrx.R
-import io.reactivex.Observable
 import kotlinx.android.synthetic.main.main_fragment.*
-import java.util.concurrent.TimeUnit
+import kotlin.random.Random
 
-data class State(
-    val title: String = "Test",
-    val temp: Async<Int> = Uninitialized
-) : MvRxState
+data class HelloWorldState(
+    val title: String = "HelloWorld ${Random.nextInt(100)}"
+)
 
-class HelloWorldViewModel(initialState: State) : MvRxViewModel<State>(initialState) {
-    fun fetchTemp() {
-        Observable.just(54)
-            .delay(3, TimeUnit.SECONDS)
-            .execute { copy(temp = it) }
-    }
-}
+class MainFragment : Fragment() {
 
-class MainFragment : BaseMvRxFragment() {
+    private val state = HelloWorldState()
+
     companion object {
-        private const val TAG = "MainFragment"
-        fun newInstance() = MainFragment()
+        fun newInstance(): MainFragment = MainFragment()
     }
-
-    private val viewModel: HelloWorldViewModel by activityViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,17 +30,7 @@ class MainFragment : BaseMvRxFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        text.setOnClickListener {
-            viewModel.fetchTemp()
-        }
+        text.text = state.title
     }
 
-    override fun invalidate() = withState(viewModel) { state ->
-        text.text = when (state.temp) {
-            is Uninitialized -> "Click to load weather"
-            is Loading -> "Loading"
-            is Success -> "Success ${state.temp}"
-            is Fail -> "Error"
-        }
-    }
 }
