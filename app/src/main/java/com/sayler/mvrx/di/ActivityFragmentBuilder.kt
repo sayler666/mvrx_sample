@@ -1,8 +1,8 @@
 package com.sayler.mvrx.di
 
 import com.sayler.mvrx.ui.MainActivity
-import com.sayler.mvrx.ui.UserProfileFragment
-import com.sayler.mvrx.ui.UsersFragment
+import com.sayler.mvrx.ui.userprofile.UserProfileFragment
+import com.sayler.mvrx.ui.users.UsersFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
