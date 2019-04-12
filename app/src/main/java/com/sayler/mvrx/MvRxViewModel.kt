@@ -1,4 +1,4 @@
-package com.sayler.mvrx.ui.main
+package com.sayler.mvrx
 
 import com.airbnb.mvrx.BaseMvRxViewModel
 import com.airbnb.mvrx.BuildConfig
