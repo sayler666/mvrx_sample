@@ -1,8 +1,16 @@
 package com.sayler.mvrx
 
-import android.app.Application
-import com.sayler.mvrx.ui.main.UserRepository
+import com.sayler.mvrx.di.DaggerApplicationComponent
+import dagger.android.AndroidInjector
+import dagger.android.DaggerApplication
 
-class MvRxApplication : Application() {
-    val userRepository = UserRepository()
+class MvRxApplication : DaggerApplication() {
+    override fun applicationInjector(): AndroidInjector<out DaggerApplication> =
+        DaggerApplicationComponent
+            .builder()
+            .applicationContext(this)
+            .build()
+            .also {
+                it.inject(this)
+            }
 }
