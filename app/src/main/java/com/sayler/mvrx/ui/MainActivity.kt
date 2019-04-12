@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.airbnb.mvrx.BaseMvRxActivity
 import com.sayler.mvrx.R
+import com.sayler.mvrx.ui.users.UsersFragment
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
