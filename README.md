@@ -5,7 +5,6 @@ Sample MvRx setup with Dagger Android and Assistedinject.
 [https://github.com/airbnb/MvRx](https://github.com/airbnb/MvRx)
 
 ## Dagger Android:
-https://google.github.io/dagger/android
 [https://google.github.io/dagger/android](https://google.github.io/dagger/android)
 
 ## AssistedInject:
